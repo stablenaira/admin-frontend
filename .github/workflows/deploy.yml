@@ -1,9 +1,11 @@
 name: Deploy to Production
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+      - closed
 
 concurrency:
   group: production-deploy
@@ -13,7 +15,8 @@ jobs:
   deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    environment: production    # optional: gate with required reviewers in GitHub settings
+    if: github.event.pull_request.merged == true
+    environment: production
 
     steps:
       - name: Checkout
